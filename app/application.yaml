@@ -1,0 +1,8 @@
+server:
+  port: 8799
+postgres:
+  dbDriver: postgres
+  uri: postgres://admin:quest@127.0.0.1:31881?sslmode=disable
+  user: admin
+  password: quest
+  database: qdb
