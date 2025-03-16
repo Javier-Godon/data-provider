@@ -260,8 +260,11 @@ go.work
 .ionide
 
 launch.json
-postgres-erp
 .local/*
 *text_for_readme.odt
 
 app/data-provider
+
+# Ignore generated gRPC files
+**/*.pb.go
+
