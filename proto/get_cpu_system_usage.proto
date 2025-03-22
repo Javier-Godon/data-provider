@@ -12,10 +12,14 @@ message GetCpuSystemUsageRequest {
     int64 date_to = 2;
 }
 
-message GetCpuSystemUsageResponse {
+message CpuUsage {
     string cpu = 1;
     double avg_usage = 2;
     double max_usage = 3;
     double min_usage = 4;
-}
+  }
+  
+message GetCpuSystemUsageResponse {
+    repeated CpuUsage usages = 1;
+  }
 

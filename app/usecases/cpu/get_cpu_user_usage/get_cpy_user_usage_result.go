@@ -1,6 +1,6 @@
-package get_cpu_system_usage
+package get_cpu_user_usage
 
-type GetCpuSystemUsageResult struct {
+type GetCpuUserUsageResult struct {
 	Usages []CpuUsageResult
 }
 type CpuUsageResult struct {

@@ -1,4 +1,4 @@
-package adapter
+package repositoyimpl
 
 import (
 	"context"
@@ -9,15 +9,13 @@ import (
 	"data-provider/persistence/models"
 )
 
-// type DataProviderRepositoryAdapter struct {
-// 	db *pgxpool.Pool
-// }
+type DataProviderRepositoryImpl struct{}
 
-// func New() *DataProviderRepositoryAdapter {
-// 	return &DataProviderRepositoryAdapter{}
-// }
+func New() *DataProviderRepositoryImpl {
+	return &DataProviderRepositoryImpl{}
+}
 
-func GetCpuSystemUsage() ([]models.CpuUsage, error) {
+func (r *DataProviderRepositoryImpl) GetCpuSystemUsage(dateFrom int64, dateTo int64) ([]models.CpuUsage, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
@@ -49,7 +47,7 @@ func GetCpuSystemUsage() ([]models.CpuUsage, error) {
 	return results, nil
 }
 
-func GetCpuUserUsage() ([]models.CpuUsage, error) {
+func (r *DataProviderRepositoryImpl) GetCpuUserUsage(dateFrom int64, dateTo int64) ([]models.CpuUsage, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 

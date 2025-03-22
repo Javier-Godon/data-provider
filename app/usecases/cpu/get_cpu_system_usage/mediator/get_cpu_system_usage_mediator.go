@@ -1,23 +1,26 @@
 package mediator
 
 import (
-	"data-provider/app/persistence/adapter"
-	"data-provider/usecases/get_cpu_system_usage"
-	"data-provider/framework"
 	"log"
+
+	"data-provider/framework"
+	"data-provider/repositoyimpl"
+	"data-provider/usecases/cpu/get_cpu_system_usage"
 )
 
 func init() {
-	err := framework.Register(get_cpu_system_usage.NewGetCpuSystemUsageHandler(adapter.CatalogRepositoryAdapter{}))
+	err := framework.Register(
+		get_cpu_system_usage.NewGetCpuSystemUsageHandler(repositoyimpl.New()),
+	)
 	if err != nil {
-		return
+		log.Fatalf("Failed to register handler: %v", err)
 	}
 }
 
-func Send(query get_cpu_system_usage.GetCpuSystemUsageQuery) get_cpu_system_usage.GetCategoryByIdResult {
-	GetCategoryByIdResult, err := framework.Send[get_cpu_system_usage.GetCategoryByIdCommand, get_cpu_system_usage.GetCategoryByIdResult](query)
+func Send(command get_cpu_system_usage.GetCpuSystemUsageQuery) get_cpu_system_usage.GetCpuSystemUsageResult {
+	result, err := framework.Send[get_cpu_system_usage.GetCpuSystemUsageQuery, get_cpu_system_usage.GetCpuSystemUsageResult](command)
 	if err != nil {
-		log.Fatalf("Could not execute: %v", query)
+		log.Fatalf("Could not execute command: %v", err)
 	}
-	return GetCategoryByIdResult
+	return result
 }
