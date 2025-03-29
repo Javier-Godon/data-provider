@@ -1,7 +1,8 @@
 package get_cpu_user_usage
 
 import (
-	"data-provider/persistence"
+	"github.com/Javier-Godon/data-provider/persistence"
+	"github.com/Javier-Godon/data-provider/repositoryimpl"
 )
 
 type GetCpuUserUsageHandler struct {
@@ -15,7 +16,9 @@ func NewGetCpuUserUsageHandler(repository persistence.Repository) *GetCpuUserUsa
 }
 
 func (handler GetCpuUserUsageHandler) Handle(query GetCpuUserUsageQuery) (GetCpuUserUsageResult, error) {
-	cpuUsages, err := handler.Repository.GetCpuUserUsage(query.DateFrom, query.DateTo)
+
+	repository := repositoryimpl.New()
+	cpuUsages, err := repository.GetCpuUserUsage(query.DateFrom, query.DateTo)
 	if err != nil {
 		return GetCpuUserUsageResult{}, err
 	}

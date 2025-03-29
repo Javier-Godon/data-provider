@@ -1,4 +1,4 @@
-module data-provider
+module github.com/Javier-Godon/data-provider
 
 go 1.23.4
 

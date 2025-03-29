@@ -15,6 +15,8 @@ func InitDatabase() {
 	log.Println("Initializing QuestDB")
 	dbURI := AppConfig.PostgresUrl.URI
 
+	log.Println("Database URI: ", dbURI)
+
 	config, err := pgxpool.ParseConfig(dbURI)
 	if err != nil {
 		log.Fatalf("Invalid database URI: %v", err)
@@ -27,7 +29,8 @@ func InitDatabase() {
 	config.MaxConnIdleTime = 30 * time.Minute // Idle connections are closed after 30 minutes
 	config.HealthCheckPeriod = time.Minute    // Periodically check health
 
-	DB, err = pgxpool.NewWithConfig(context.Background(), config)
+	var pool *pgxpool.Pool
+	pool, err = pgxpool.NewWithConfig(context.Background(), config)
 	if err != nil {
 		log.Fatal("Cannot connect to QuestDB:", err)
 	}
@@ -36,10 +39,12 @@ func InitDatabase() {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	err = DB.Ping(ctx)
+	err = pool.Ping(ctx)
 	if err != nil {
 		log.Fatal("Database connection test failed:", err)
 	}
+
+	DB = pool
 
 	log.Println("Connected to QuestDB successfully")
 }

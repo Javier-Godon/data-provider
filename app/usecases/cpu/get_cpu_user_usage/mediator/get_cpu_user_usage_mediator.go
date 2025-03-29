@@ -3,14 +3,14 @@ package mediator
 import (
 	"log"
 
-	"data-provider/framework"
-	"data-provider/repositoyimpl"
-	"data-provider/usecases/cpu/get_cpu_user_usage"
+	"github.com/Javier-Godon/data-provider/framework"
+	"github.com/Javier-Godon/data-provider/repositoryimpl"
+	"github.com/Javier-Godon/data-provider/usecases/cpu/get_cpu_user_usage"
 )
 
 func init() {
 	err := framework.Register(
-		get_cpu_user_usage.NewGetCpuUserUsageHandler(repositoyimpl.New()),
+		get_cpu_user_usage.NewGetCpuUserUsageHandler(&repositoryimpl.DataProviderRepositoryImpl{}),
 	)
 	if err != nil {
 		log.Fatalf("Failed to register handler: %v", err)

@@ -2,17 +2,23 @@ package grpc
 
 import (
 	"context"
+	"log"
 
-	"data-provider/usecases/cpu/get_cpu_user_usage"
-	pb "data-provider/usecases/cpu/get_cpu_user_usage/grpc/proto"
-	"data-provider/usecases/cpu/get_cpu_user_usage/mediator"
+	"github.com/Javier-Godon/data-provider/usecases/cpu/get_cpu_user_usage"
+	pb "github.com/Javier-Godon/data-provider/usecases/cpu/get_cpu_user_usage/grpc/proto"
+	"github.com/Javier-Godon/data-provider/usecases/cpu/get_cpu_user_usage/mediator"
 )
 
 type Service struct {
 	pb.UnimplementedGetCpuUserUsageServiceServer
 }
 
+func NewService() *Service {
+	return &Service{}
+}
+
 func (s *Service) GetCpuUserUsage(ctx context.Context, req *pb.GetCpuUserUsageRequest) (*pb.GetCpuUserUsageResponse, error) {
+	log.Printf("GetCpuUserUsage called with dateFrom=%d, dateTo=%d", req.DateFrom, req.DateTo)
 	command := fromRequestToQuery(req)
 	result := mediator.Send(command)
 	return fromResultToResponse(result), nil

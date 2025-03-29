@@ -1,6 +1,6 @@
 package persistence
 
-import "data-provider/persistence/models"
+import "github.com/Javier-Godon/data-provider/persistence/models"
 
 type Repository interface {
 	GetCpuSystemUsage(dateFrom int64, dateTo int64) ([]models.CpuUsage, error)

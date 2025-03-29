@@ -1,7 +1,7 @@
 syntax = "proto3";
 
-package grpc;
-option go_package = "/proto";
+package cpu_system_usage;
+option go_package = "data-provider/usecases/cpu/get_cpu_system_usage/grpc/proto;cpu_system_usage";
 
 service GetCpuSystemUsageService {
     rpc GetCpuSystemUsage (GetCpuSystemUsageRequest) returns (GetCpuSystemUsageResponse);
