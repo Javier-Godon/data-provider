@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+package full_prometheus_data;
+option go_package = "github.com/Javier-Godon/proto/fullprometheusdata;fullprometheusdata";
+
+
+service GetFullPrometheusDataService {
+    rpc GetFullPrometheusData (GetFullPrometheusDataRequest) returns (GetFullPrometheusDataResponse);
+}
+
+message GetFullPrometheusDataRequest {
+    int64 date_from = 1;
+    int64 date_to = 2;
+}
+
+message FullPrometheusData {
+    int64  timestamp = 1;
+    double process_cpu_usage = 2;
+    int32  jvm_memory_max = 3;
+    int32  process_runtime_jvm_memory_usage = 4;
+    int32  process_runtime_jvm_threads_count = 5; // Go's int8 becomes int32 in proto3
+    int32  process_runtime_jvm_system_cpu_utilization = 6; // Go's int16 becomes int32 in proto3
+    string k8s_pod_name = 7;
+    string k8s_container_name = 8;
+    string k8s_deployment_name = 9;
+    int32  otlp_exporter_exported = 10; // Go's int8 becomes int32 in proto3
+}
+
+message GetFullPrometheusDataResponse {
+    repeated FullPrometheusData prometheus_data = 1;
+  }

@@ -100,3 +100,52 @@ func (r *DataProviderRepositoryImpl) GetCpuUserUsage(dateFrom int64, dateTo int6
 
 	return results, nil
 }
+
+func (r DataProviderRepositoryImpl) GetFullPrometheusData(dateFrom int64, dateTo int64) ([]models.FullPrometheusData, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	dateFromMicro := dateFrom * 1_000_000
+	dateToMicro := dateTo * 1_000_000
+
+	if r.db == nil {
+		log.Println("Database connection is nil")
+		return nil, errors.New("database connection is not initialized")
+	}
+
+	rows, err := r.db.Query(ctx, `
+	SELECT timestamp,process_cpu_usage, jvm_memory_max,process_runtime_jvm_memory_usage,process_runtime_jvm_threads_count, process_runtime_jvm_system_cpu_utilization,k8s_pod_name,k8s_container_name,k8s_deployment_name,otlp_exporter_exported  from prometheus 
+	WHERE timestamp >= CAST($1 AS TIMESTAMP)
+	AND timestamp <= CAST($2 AS TIMESTAMP);
+`, dateFromMicro, dateToMicro)
+	if err != nil {
+		log.Println("Query error:", err)
+		return nil, err
+	}
+	defer rows.Close()
+
+	var results []models.FullPrometheusData
+	for rows.Next() {
+		var data models.FullPrometheusData	
+
+		if err := rows.Scan(
+			&data.Timestamp,
+			&data.ProcessCpuUsage,
+			&data.JvmMemoryMax,
+			&data.ProcessRuntimeJvmMemoryUsage,
+			&data.ProcessRuntimeJvmThreadsCount,
+			&data.ProcessRuntimeJvmSystemCpuUtilization,
+			&data.K8sPodName,
+			&data.K8sContainerName,
+			&data.K8sDeploymentName,
+			&data.OtlpExporterExported,
+		); err != nil {
+			log.Println("Scan error:", err)
+			return nil, err
+		}
+
+		results = append(results, data)
+	}
+
+	return results, nil
+}

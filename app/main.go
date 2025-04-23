@@ -9,10 +9,12 @@ import (
 	// gRPC services
 	getCpuSystemUsage "github.com/Javier-Godon/data-provider/usecases/cpu/get_cpu_system_usage/grpc"
 	getCpuUserUsage "github.com/Javier-Godon/data-provider/usecases/cpu/get_cpu_user_usage/grpc"
+	getFullPrometheusData "github.com/Javier-Godon/data-provider/usecases/prometheus/get_full_prometheus_data/grpc"
 
 	// generated Protobuf packages
 	pbCpuSystemUsage "github.com/Javier-Godon/data-provider/usecases/cpu/get_cpu_system_usage/grpc/proto"
 	pbCpuUserUsage "github.com/Javier-Godon/data-provider/usecases/cpu/get_cpu_user_usage/grpc/proto"
+	pbFullPrometheusData "github.com/Javier-Godon/data-provider/proto/get_full_prometheus_data"
 
 	"google.golang.org/grpc"
 )
@@ -41,6 +43,7 @@ func main() {
 	// Register services
 	pbCpuSystemUsage.RegisterGetCpuSystemUsageServiceServer(grpcServer, &getCpuSystemUsage.Service{})
 	pbCpuUserUsage.RegisterGetCpuUserUsageServiceServer(grpcServer, getCpuUserUsage.NewService())
+	pbFullPrometheusData.RegisterGetFullPrometheusDataServiceServer(grpcServer, &getFullPrometheusData.Service{})
 
 	log.Println("gRPC Server is running on port", serverPort)
 	if err := grpcServer.Serve(lis); err != nil {
