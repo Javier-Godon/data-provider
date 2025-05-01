@@ -12,9 +12,9 @@ type CpuUsage struct {
 type FullPrometheusData struct {
 	Timestamp                             pgtype.Timestamp
 	ProcessCpuUsage                       pgtype.Float8
-	JvmMemoryMax                          pgtype.Int4
-	ProcessRuntimeJvmMemoryUsage          pgtype.Int4
-	ProcessRuntimeJvmThreadsCount         pgtype.Int2
+	JvmMemoryMax                          pgtype.Float4
+	ProcessRuntimeJvmMemoryUsage          pgtype.Float8
+	ProcessRuntimeJvmThreadsCount         pgtype.Float8
 	ProcessRuntimeJvmSystemCpuUtilization pgtype.Float8
 	K8sPodName                            pgtype.Text
 	K8sContainerName                      pgtype.Text

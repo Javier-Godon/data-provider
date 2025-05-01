@@ -6,10 +6,10 @@ type GetFullPrometheusDataResult struct {
 type PrometheusDataResult struct {
 	Timestamp                             int64
 	ProcessCpuUsage                       float64
-	JvmMemoryMax                          int32
-	ProcessRuntimeJvmMemoryUsage          int32
-	ProcessRuntimeJvmThreadsCount         int8
-	ProcessRuntimeJvmSystemCpuUtilization int16
+	JvmMemoryMax                          float64
+	ProcessRuntimeJvmMemoryUsage          float64
+	ProcessRuntimeJvmThreadsCount         float64
+	ProcessRuntimeJvmSystemCpuUtilization float64
 	K8sPodName                            string
 	K8sContainerName                      string
 	K8sDeploymentName                     string

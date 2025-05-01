@@ -114,9 +114,21 @@ func (r DataProviderRepositoryImpl) GetFullPrometheusData(dateFrom int64, dateTo
 	}
 
 	rows, err := r.db.Query(ctx, `
-	SELECT timestamp,process_cpu_usage, jvm_memory_max,process_runtime_jvm_memory_usage,process_runtime_jvm_threads_count, process_runtime_jvm_system_cpu_utilization,k8s_pod_name,k8s_container_name,k8s_deployment_name,otlp_exporter_exported  from prometheus 
+	SELECT 
+		timestamp,
+		avg(process_cpu_usage) AS process_cpu_usage,
+		avg(jvm_memory_max) AS jvm_memory_max,
+		avg(process_runtime_jvm_memory_usage) AS process_runtime_jvm_memory_usage,
+		avg(process_runtime_jvm_threads_count) AS process_runtime_jvm_threads_count,
+		avg(process_runtime_jvm_system_cpu_utilization) AS process_runtime_jvm_system_cpu_utilization,
+		k8s_pod_name,
+		k8s_container_name,
+		k8s_deployment_name,
+		sum(otlp_exporter_exported) AS total_exported
+	FROM prometheus
 	WHERE timestamp >= CAST($1 AS TIMESTAMP)
-	AND timestamp <= CAST($2 AS TIMESTAMP);
+	  AND timestamp <= CAST($2 AS TIMESTAMP)
+	SAMPLE BY 1d ALIGN TO CALENDAR;
 `, dateFromMicro, dateToMicro)
 	if err != nil {
 		log.Println("Query error:", err)
